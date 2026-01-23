@@ -20,7 +20,7 @@ Usuário → Azure Static Web Apps → Open-Meteo API
 - Integração com GitHub
 
 ## 🌍 Link da aplicação
-👉 https://xxxxx.azurestaticapps.net
+👉 [Consulta Clima](https://gray-desert-0a443930f.2.azurestaticapps.net)
 
 ## 📸 Screenshots
 (prints aqui)
