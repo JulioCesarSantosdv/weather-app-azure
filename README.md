@@ -1,32 +1,38 @@
 # Weather App – Azure Static Web Apps
 
 ## 📌 Descrição
-Aplicação web estática desenvolvida com HTML, CSS e JavaScript puro,
-publicada utilizando Azure Static Web Apps como parte do estudo da certificação AZ-900.
+Aplicação web estática desenvolvida com HTML, CSS e JavaScript puro, publicada utilizando
+Azure Static Web Apps (Free Tier) como parte do estudo prático da certificação AZ-900.
+
+O projeto tem como objetivo demonstrar conceitos fundamentais de computação em nuvem,
+publicação de aplicações PaaS e automação de deploy, com foco em controle de custos e boas práticas.
 
 ## ☁️ Arquitetura
-Usuário → Azure Static Web Apps → Open-Meteo API
+Usuário → Navegador → Azure Static Web Apps → Open-Meteo API (serviço externo)
+
+> O consumo da API ocorre diretamente no navegador (client-side), sem backend próprio,
+não gerando custos no Azure.
 
 ## 🚀 Deploy
 - Azure Static Web Apps (Free Tier)
-- CI/CD via GitHub Actions
-- Deploy automático a cada push
+- Integração nativa com GitHub Actions
+- Deploy automático a cada push no branch principal
 
 ## 🧠 Conceitos Azure aplicados
-- PaaS
+- Plataforma como Serviço (PaaS)
 - Alta disponibilidade
-- Escalabilidade
-- Modelo de custo baseado em consumo
-- Integração com GitHub
+- Escalabilidade gerenciada
+- Modelo de custo controlado (Free Tier)
+- Integração Azure + GitHub (CI/CD)
 
 ## 🌍 Link da aplicação
-👉<a href="https://gray-desert-0a443930f.2.azurestaticapps.net" target="_blank" rel="noopener noreferrer">
-  Consulta Clima
-</a>
+👉 [Consulta Clima](https://gray-desert-0a443930f.2.azurestaticapps.net)
 
 ## 📸 Screenshots
-<img width="1365" height="608" alt="image" src="https://github.com/user-attachments/assets/27833946-83ad-4e8c-85f6-4620d85fb5e7" />
-<img width="1010" height="536" alt="image" src="https://github.com/user-attachments/assets/49f88cca-18b5-454f-ba1c-06f8c64a59d4" />
+![Aplicação em execução](https://github.com/user-attachments/assets/27833946-83ad-4e8c-85f6-4620d85fb5e7)
+![Recurso Azure Static Web Apps](https://github.com/user-attachments/assets/49f88cca-18b5-454f-ba1c-06f8c64a59d4)
+
+
 
 
 
