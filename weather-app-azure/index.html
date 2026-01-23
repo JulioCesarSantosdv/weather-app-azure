@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Clima 💧</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/functions.js" defer></script>
+    <script src="js/scripts.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--  Vídeo de fundo -->
+    <video id="bg-video" autoplay muted loop class="bg-video">
+        <source src="video/default.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <h2>Consulta Clima</h2>
+
+        <input
+            type="text"
+            id="city-input"
+            placeholder="Digite o nome da cidade"
+        >
+
+        <button id="get-weather">Pesquisar</button>
+
+        <div id="weather-result"></div>
+
+        <footer>
+            <p>Dados fornecidos por Open-Meteo</p>
+        </footer>
+    </div>
+
+</body>
+</html>
