@@ -8,7 +8,8 @@ O projeto tem como objetivo demonstrar conceitos fundamentais de computação em
 publicação de aplicações PaaS e automação de deploy, com foco em controle de custos e boas práticas.
 
 ## ☁️ Arquitetura
-Usuário → Navegador → Azure Static Web Apps → Open-Meteo API (serviço externo)
+<img width="721" height="413" alt="image" src="https://github.com/user-attachments/assets/82518481-1956-4566-a1b4-3b6cd64035d2" />
+
 
 > O consumo da API ocorre diretamente no navegador (client-side), sem backend próprio,
 não gerando custos no Azure.
