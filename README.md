@@ -31,7 +31,8 @@ não gerando custos no Azure.
 
 ## Screenshots
 ![Aplicação em execução](https://github.com/user-attachments/assets/27833946-83ad-4e8c-85f6-4620d85fb5e7)
-![Recurso Azure Static Web Apps](https://github.com/user-attachments/assets/49f88cca-18b5-454f-ba1c-06f8c64a59d4)
+<img width="921" height="368" alt="image" src="https://github.com/user-attachments/assets/6ed2fece-fd01-4cfa-836d-14966a2f5802" />
+
 
 
 
