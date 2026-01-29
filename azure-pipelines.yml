@@ -1,0 +1,29 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+# 1. Listar arquivos do repositório (debug inicial)
+- script: |
+    echo "Listing repository files"
+    ls
+  displayName: "List repository files"
+
+# 2. Criar o ZIP do site
+- task: ArchiveFiles@2
+  displayName: "Archive Weather App"
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/weather-app.zip'
+    replaceExistingArchive: true
+
+# 3. Publicar o artifact
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Artifact"
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
