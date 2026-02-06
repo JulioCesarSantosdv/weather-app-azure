@@ -1,0 +1,31 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: ci
+    source: JulioCesarSantosdv.weather-app-azure
+    trigger: true
+
+stages:
+- stage: Teste
+  displayName: "Deploy TESTE"
+  jobs:
+  - job: DeployTeste
+    displayName: "Upload para Storage TESTE"
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - download: ci
+      artifact: drop
+
+    - task: AzureCLI@2
+      displayName: "Deploy no Azure Blob TESTE"
+      inputs:
+        azureSubscription: "sc-weather-app-cicd"
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az storage blob upload-batch \
+            --account-name weatherappteste \
+            --destination \$web \
+            --source $(Pipeline.Workspace)/ci/drop
