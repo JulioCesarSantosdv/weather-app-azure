@@ -87,7 +87,7 @@ stages:
                   scriptLocation: inlineScript
                   inlineScript: |
                     az storage blob upload-batch \
-                      --account-name weatherappprod \
+                      --account-name weatherappproduction \
                       --destination \$web \
                       --source $(Pipeline.Workspace)/ci/drop
 
