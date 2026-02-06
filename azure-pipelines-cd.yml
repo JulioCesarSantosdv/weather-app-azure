@@ -1,15 +1,30 @@
+# =========================================================
+# PIPELINE CD – Weather App
+# Responsável por fazer deploy nos ambientes:
+# TESTE → QA → PRODUÇÃO
+# =========================================================
+
+# Não dispara automaticamente por push neste pipeline
+# Ele é acionado quando o pipeline de CI gera um artifact
 trigger: none
 
+# =========================================================
+# RECURSO: PIPELINE DE CI
+# =========================================================
 resources:
   pipelines:
-    - pipeline: ci
-      source: JulioCesarSantosdv.weather-app-azure
-      trigger: true
+    - pipeline: ci                     # Nome interno do recurso
+      source: JulioCesarSantosdv.weather-app-azure  # Nome do pipeline de CI
+      trigger: true                    # Dispara CD quando CI finalizar
 
+# =========================================================
+# STAGES
+# =========================================================
 stages:
-# =========================
+
+# =========================================================
 # STAGE: TESTE
-# =========================
+# =========================================================
 - stage: Teste
   displayName: "Deploy TESTE"
   jobs:
@@ -17,10 +32,23 @@ stages:
       displayName: "Upload para Storage TESTE"
       pool:
         vmImage: ubuntu-latest
+
       steps:
+        # 1 Baixa o artifact gerado pelo pipeline de CI
         - download: ci
           artifact: drop
 
+        # 2 Extrai o ZIP do artifact
+        # IMPORTANTE:
+        # Azure Static Website NÃO faz unzip automaticamente
+        - task: ExtractFiles@1
+          displayName: "Extrair artifact TESTE"
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/ci/drop/*.zip'
+            destinationFolder: '$(Pipeline.Workspace)/extracted'
+            cleanDestinationFolder: true
+
+        # 3 Faz upload dos arquivos EXTRAÍDOS para o $web
         - task: AzureCLI@2
           displayName: "Deploy no Azure Blob TESTE"
           inputs:
@@ -31,23 +59,35 @@ stages:
               az storage blob upload-batch \
                 --account-name weatherappteste \
                 --destination \$web \
-                --source $(Pipeline.Workspace)/ci/drop
+                --source $(Pipeline.Workspace)/extracted \
+                --auth-mode login
 
-# =========================
+# =========================================================
 # STAGE: QA
-# =========================
+# =========================================================
 - stage: QA
   displayName: "Deploy QA"
-  dependsOn: Teste
+  dependsOn: Teste     # Só executa se TESTE passar
   jobs:
     - job: DeployQA
       displayName: "Upload para Storage QA"
       pool:
         vmImage: ubuntu-latest
+
       steps:
+        # 1 Baixa o mesmo artifact do CI
         - download: ci
           artifact: drop
 
+        # 2 Extrai o ZIP
+        - task: ExtractFiles@1
+          displayName: "Extrair artifact QA"
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/ci/drop/*.zip'
+            destinationFolder: '$(Pipeline.Workspace)/extracted'
+            cleanDestinationFolder: true
+
+        # 3 Upload para a Storage Account de QA
         - task: AzureCLI@2
           displayName: "Deploy no Azure Blob QA"
           inputs:
@@ -58,27 +98,42 @@ stages:
               az storage blob upload-batch \
                 --account-name weatherappqa \
                 --destination \$web \
-                --source $(Pipeline.Workspace)/ci/drop
+                --source $(Pipeline.Workspace)/extracted \
+                --auth-mode login
 
-# =========================
+# =========================================================
 # STAGE: PRODUÇÃO
-# =========================
+# =========================================================
 - stage: Producao
   displayName: "Deploy PRODUÇÃO"
-  dependsOn: QA
+  dependsOn: QA       # Só executa se QA passar
+
   jobs:
+    # Deployment Job permite usar Environment + aprovação manual
     - deployment: DeployProducao
       displayName: "Upload para Storage PRODUÇÃO"
-      environment: Producao
+      environment: Producao   # Ambiente configurado no Azure DevOps
       pool:
         vmImage: ubuntu-latest
+
       strategy:
         runOnce:
           deploy:
             steps:
+              # 1 Baixa o artifact do CI
               - download: ci
                 artifact: drop
 
+              # 2 Extrai o ZIP
+              - task: ExtractFiles@1
+                displayName: "Extrair artifact PRODUÇÃO"
+                inputs:
+                  archiveFilePatterns: '$(Pipeline.Workspace)/ci/drop/*.zip'
+                  destinationFolder: '$(Pipeline.Workspace)/extracted'
+                  cleanDestinationFolder: true
+
+              # 3 Upload para a Storage Account de PRODUÇÃO
+              # Só acontece APÓS aprovação manual
               - task: AzureCLI@2
                 displayName: "Deploy no Azure Blob PRODUÇÃO"
                 inputs:
@@ -89,5 +144,5 @@ stages:
                     az storage blob upload-batch \
                       --account-name weatherappproduction \
                       --destination \$web \
-                      --source $(Pipeline.Workspace)/ci/drop
-
+                      --source $(Pipeline.Workspace)/extracted \
+                      --auth-mode login
