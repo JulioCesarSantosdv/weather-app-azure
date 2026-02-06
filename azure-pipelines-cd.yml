@@ -7,6 +7,9 @@ resources:
     trigger: true
 
 stages:
+# =========================
+# STAGE: TESTE
+# =========================
 - stage: Teste
   displayName: "Deploy TESTE"
   jobs:
@@ -27,5 +30,32 @@ stages:
         inlineScript: |
           az storage blob upload-batch \
             --account-name weatherappteste \
+            --destination \$web \
+            --source $(Pipeline.Workspace)/ci/drop
+
+# =========================
+# STAGE: QA
+# =========================
+- stage: QA
+  displayName: "Deploy QA"
+  dependsOn: Teste
+  jobs:
+  - job: DeployQA
+    displayName: "Upload para Storage QA"
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - download: ci
+      artifact: drop
+
+    - task: AzureCLI@2
+      displayName: "Deploy no Azure Blob QA"
+      inputs:
+        azureSubscription: "sc-weather-app-cicd"
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az storage blob upload-batch \
+            --account-name weatherappqa \
             --destination \$web \
             --source $(Pipeline.Workspace)/ci/drop
